@@ -111,7 +111,7 @@ public class V1NotarizationProviderTest {
         try {
             notary.deserializeNotaryKey(json, "not the right password".toCharArray());
             fail("  The different password should have caused a failure.");
-        } catch (TransactionException e) {
+        } catch (ValidationException e) {
             // expected
         }
         NotaryKey copy = notary.deserializeNotaryKey(json, password);

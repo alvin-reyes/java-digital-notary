@@ -14,12 +14,12 @@ import org.joda.time.DateTime;
 
 
 /**
- * This exception class captures the list of errors that occurred while attempting a
- * digital transaction.
+ * This exception class captures the list of errors that occurred while attempting to
+ * validate a document.
  *
  * @author Derk Norton
  */
-public class TransactionException extends RuntimeException {
+public class ValidationException extends RuntimeException {
 
     /**
      * A timestamp of when the exception occurred.
@@ -34,13 +34,13 @@ public class TransactionException extends RuntimeException {
     public final Map<String, Object> errors;
 
     /**
-     * This constructor captures the message resource tag for the transaction exception
+     * This constructor captures the message resource tag for the validation exception
      * along with the details of each error stored as a map.
      *
-     * @param messageTag The message resource tag for the transaction exception.
+     * @param messageTag The message resource tag for the validation exception.
      * @param errors A map of the details for each error.
      */
-    public TransactionException(String messageTag, Map<String, Object> errors) {
+    public ValidationException(String messageTag, Map<String, Object> errors) {
         super(messageTag);
         this.timestamp = DateTime.now();
         this.errors = errors;

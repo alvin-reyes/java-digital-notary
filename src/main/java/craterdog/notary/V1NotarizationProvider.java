@@ -242,7 +242,7 @@ public final class V1NotarizationProvider implements Notarization {
             Map<String, Object> errors = new LinkedHashMap<>();
             errors.put("json.string", json);
             logger.error("The notary key password is invalid for the following notary key: {}", json);
-            throw new TransactionException(messageTag, errors);
+            throw new ValidationException(messageTag, errors);
         } catch (Exception e) {
             RuntimeException exception = new RuntimeException("An unexpected exception occurred while attempting to deserialize a notary key: " + json, e);
             throw logger.throwing(exception);
@@ -333,11 +333,11 @@ public final class V1NotarizationProvider implements Notarization {
 
 
     @Override
-    public void throwExceptionOnErrors(String messageTag, Map<String, Object> errors) throws TransactionException {
+    public void throwExceptionOnErrors(String messageTag, Map<String, Object> errors) throws ValidationException {
         logger.entry(messageTag, errors);
         if (!errors.isEmpty()) {
-            logger.error("A transaction exception \"" + messageTag + "\" was thrown with the following errors: {}", errors);
-            throw new TransactionException(messageTag, errors);
+            logger.error("A validation exception \"" + messageTag + "\" was thrown with the following errors: {}", errors);
+            throw new ValidationException(messageTag, errors);
         }
         logger.exit();
     }

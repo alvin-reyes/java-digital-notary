@@ -149,7 +149,7 @@ public interface Notarization {
      * @param json The JSON string representing the notary key.
      * @param password The password to be used to decrypt the signing key.
      * @return The reconstituted notary key.
-     * @throws java.io.IOException
+     * @throws java.io.IOException The notary key could not be deserialized.
      */
     NotaryKey deserializeNotaryKey(String json, char[] password) throws IOException;
 
@@ -186,12 +186,13 @@ public interface Notarization {
     void validateDocument(String document, NotarySeal seal, NotaryCertificate certificate, Map<String, Object> errors);
 
     /**
-     * This method checks to see if there are any errors and throws a transaction exception
+     * This method checks to see if there are any errors and throws a validation exception
      * containing the errors if there are.
      *
-     * @param messageTag The message resource tag for the transaction exception.
+     * @param messageTag The message resource tag for the validation exception.
      * @param errors The map of errors (and empty map means no errors).
+     * @throws ValidationException There were errors in the errors map.
      */
-    void throwExceptionOnErrors(String messageTag, Map<String, Object> errors) throws TransactionException;
+    void throwExceptionOnErrors(String messageTag, Map<String, Object> errors) throws ValidationException;
 
 }
