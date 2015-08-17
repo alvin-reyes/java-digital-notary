@@ -7,7 +7,7 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions;
+package craterdog.notary;
 
 import craterdog.primitives.Tag;
 import java.io.File;
@@ -68,7 +68,11 @@ public class V1NotarizationProviderTest {
         String json = notary.serializeNotaryKey(notaryKey, password);
         NotaryKey copy = notary.deserializeNotaryKey(json, password);
         assertEquals("  Serialization round trip failed.", notaryKey, copy);
-        outputExample("InitialNotaryKey.json", json);
+        outputExample("NotaryKey.json", json);
+
+        logger.info("  Exporting the notary certificate...");
+        NotaryCertificate certificate = notaryKey.verificationCertificate;
+        outputExample("NotaryCertificate.json", certificate);
 
         logger.info("  Generating a new watermark...");
         Watermark watermark = notary.generateWatermark(Notarization.VALID_FOR_ONE_YEAR);
@@ -81,7 +85,6 @@ public class V1NotarizationProviderTest {
         outputExample("NotarySeal.json", seal);
 
         logger.info("  Verifying the notary seal...");
-        NotaryCertificate certificate = notaryKey.verificationCertificate;
         Map<String, Object> errors = new LinkedHashMap<>();
         notary.validateDocument(document, seal, certificate, errors);
         assertTrue("  Invalid notary seal.", errors.isEmpty());
@@ -94,7 +97,6 @@ public class V1NotarizationProviderTest {
         json = notary.serializeNotaryKey(notaryKey, password);
         copy = notary.deserializeNotaryKey(json, password);
         assertEquals("  Serialization round trip failed.", notaryKey, copy);
-        outputExample("RenewedNotaryKey.json", json);
 
         logger.info("Round trip digital signing and verification test completed.\n");
     }

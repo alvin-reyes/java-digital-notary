@@ -7,7 +7,7 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions;
+package craterdog.notary;
 
 import java.io.IOException;
 import java.net.URI;

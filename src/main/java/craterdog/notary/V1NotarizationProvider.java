@@ -7,11 +7,11 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions;
+package craterdog.notary;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import craterdog.primitives.Tag;
-import craterdog.transactions.mappers.NotaryModule;
+import craterdog.notary.mappers.NotaryModule;
 import craterdog.security.CertificateManager;
 import craterdog.security.MessageCryptex;
 import craterdog.security.RsaAesMessageCryptex;

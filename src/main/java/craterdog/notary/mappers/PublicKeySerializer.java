@@ -7,47 +7,31 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions.mappers;
+package craterdog.notary.mappers;
 
-import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import craterdog.security.CertificateManager;
 import craterdog.security.RsaCertificateManager;
 import java.io.IOException;
-import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
- * This class handles the unmarshaling of a private key from an encrypted PEM string.
+ * This class handles the marshaling of a public key into a PEM string.
  *
  * @author Derk Norton
  */
-public class PrivateKeyDeserializer extends JsonDeserializer<PrivateKey> {
+public class PublicKeySerializer extends JsonSerializer<PublicKey> {
 
     static private final CertificateManager certificateManager = new RsaCertificateManager();
 
-    private final char[] password;
-
-
-    public PrivateKeyDeserializer() {
-        this.password = null;
-    }
-
-
-    public PrivateKeyDeserializer(char[] password) {
-        this.password = password;
-    }
-
-
     @Override
-    public PrivateKey deserialize(JsonParser p, DeserializationContext ctxt)
+    public void serialize(PublicKey publicKey, JsonGenerator generator, SerializerProvider provider)
             throws IOException, JsonProcessingException {
-        PrivateKey privateKey = null;
-        if (password != null) {
-            privateKey = certificateManager.decodePrivateKey(p.getValueAsString(), password);
-        }
-        return privateKey;
+        String pemValue = certificateManager.encodePublicKey(publicKey);
+        generator.writeString(pemValue);
     }
 
 }

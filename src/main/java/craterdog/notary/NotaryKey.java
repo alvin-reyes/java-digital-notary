@@ -7,9 +7,9 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions;
+package craterdog.notary;
 
-import craterdog.transactions.mappers.NotaryModule;
+import craterdog.notary.mappers.NotaryModule;
 import craterdog.smart.SmartObject;
 import java.security.PrivateKey;
 

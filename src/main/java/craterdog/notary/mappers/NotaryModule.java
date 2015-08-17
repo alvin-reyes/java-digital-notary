@@ -7,7 +7,7 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions.mappers;
+package craterdog.notary.mappers;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import java.security.PrivateKey;

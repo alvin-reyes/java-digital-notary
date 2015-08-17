@@ -7,7 +7,7 @@
  * under the terms of The MIT License (MIT), as published by the Open   *
  * Source Initiative. (See http://opensource.org/licenses/MIT)          *
  ************************************************************************/
-package craterdog.transactions.mappers;
+package craterdog.notary.mappers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -16,22 +16,38 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import craterdog.security.CertificateManager;
 import craterdog.security.RsaCertificateManager;
 import java.io.IOException;
-import java.security.PublicKey;
+import java.security.PrivateKey;
 
 /**
- * This class handles the unmarshaling of a public key from a PEM string.
+ * This class handles the unmarshaling of a private key from an encrypted PEM string.
  *
  * @author Derk Norton
  */
-public class PublicKeyDeserializer extends JsonDeserializer<PublicKey> {
+public class PrivateKeyDeserializer extends JsonDeserializer<PrivateKey> {
 
     static private final CertificateManager certificateManager = new RsaCertificateManager();
 
+    private final char[] password;
+
+
+    public PrivateKeyDeserializer() {
+        this.password = null;
+    }
+
+
+    public PrivateKeyDeserializer(char[] password) {
+        this.password = password;
+    }
+
+
     @Override
-    public PublicKey deserialize(JsonParser p, DeserializationContext ctxt)
+    public PrivateKey deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        PublicKey publicKey = certificateManager.decodePublicKey(p.getValueAsString());
-        return publicKey;
+        PrivateKey privateKey = null;
+        if (password != null) {
+            privateKey = certificateManager.decodePrivateKey(p.getValueAsString(), password);
+        }
+        return privateKey;
     }
 
 }

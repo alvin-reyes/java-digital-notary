@@ -13,8 +13,8 @@ it to validate the seal.
 
 The key benefits to this approach include:
  * A notary seal cannot be forged without the private key.
- * The notarized document cannot be changed later without invalidating the notary seal.
- * The notary cannot claim they did not notarize the document (i.e. non-repudiation).
+ * A notarized document cannot be changed later without invalidating the notary seal.
+ * A notary cannot claim they did not notarize the document (i.e. non-repudiation).
 
 ### Highlighted Components
 The following highlights the various components that are provided by this project:
