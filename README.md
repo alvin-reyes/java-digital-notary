@@ -1,20 +1,26 @@
 ![Java Digital Notary](https://github.com/craterdog/java-digital-notary/blob/master/docs/images/seal.jpg)
 
 ### Java Digital Notary
-The advent of public/private key cryptography has made the digital signing (or notarization)
-of electronic documents easy and tamperproof.  The approach is simple, the person or program
-acting as a digital notary generates a public/private key pair and keeps the private key
-safe.  The public key is wrapped in a self-signed certificate and published in the cloud
-so that anyone can download and use it.  This facilitates digital notarization as follows:
- 1. The notary creates a digital signature of an electronic document using the private key.
+It's common to be asked to have certain documents notarized when dealing with financial institutions. The
+notary seal says in effect "I certify that this document was signed by this person on this date."  This
+system works because it follows a simple process:
+ 1. The Public Notary verifies the *identity* of the person signing the document using some government issued photo Id.
+ 1. The Public Notary *witnesses* the person signing the actual document.
+ 1. The Public Notary applies a *notary seal* to the document to certify it.
+
+These three steps provide most financial institutions sufficient confidence that the document really was
+signed by the person on that date. But this process is time-consuming and requires the services of a
+Public Notary. It also does not guarantee that the document can't be modified after it was notarized.
+
+The advent of public/private key cryptography has made the digital equivalent of the notarization of
+electronic documents easy and tamperproof.  The approach is simple, the person or program acting as a
+digital notary generates a public/private key pair and keeps the private key safe.  The public key is
+wrapped in a self-signed certificate and published in the cloud so that anyone can download and use it.
+This facilitates digital notarization as follows:
+ 1. The digital notary creates a digital signature of an electronic document using the private key.
  1. The notary attaches the signature as a notary seal to the document and publishes it.
  1. Anyone who wants to verify the notary seal can download the public certificate and use
 it to validate the seal.
-
-The key benefits to this approach include:
- * A notary seal cannot be forged without the private key.
- * A notarized document cannot be changed later without invalidating the notary seal.
- * A notary cannot claim they did not notarize the document (i.e. non-repudiation).
 
 ### Highlighted Components
 The following highlights the various components that are provided by this project:
