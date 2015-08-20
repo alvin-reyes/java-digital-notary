@@ -55,6 +55,48 @@ public class V1NotarizationProviderTest {
 
 
     @Test
+    public void testExamples() throws Exception {
+        logger.info("Testing the wiki example code...");
+
+        // Initializing a Notification Provider
+        Notarization notary = new V1NotarizationProvider();
+
+        // Generating an Initial Notary Key
+        URI baseUri = new URI("http://foo.bar/IdentityRegistry");
+        NotaryKey notaryKey = notary.generateNotaryKey(baseUri);
+        logger.info("notaryKey : {}", notaryKey);
+
+        // Serializing and Deserializing a Notary Key
+        char[] password = "areallyhardtoguesspassword".toCharArray();
+        String json = notary.serializeNotaryKey(notaryKey, password);
+        logger.info("serializedNotaryKey : {}", json);
+        NotaryKey copy = notary.deserializeNotaryKey(json, password);
+        assert notaryKey.equals(copy);
+
+        // Extracting the Public Notary Certificate
+        NotaryCertificate certificate = notaryKey.verificationCertificate;
+        logger.info("notaryCertificate : {}", certificate);
+
+        // Notarizing a Document
+        String documentType = "Example Document";
+        String document = "This is a very important legal document that must be notarized!";
+        NotarySeal seal = notary.notarizeDocument(documentType, document, notaryKey);
+        logger.info("notarySeal : {}", seal);
+
+        // Validating the Notary Seal
+        Map<String, Object> errors = new LinkedHashMap<>();
+        notary.validateDocument(document, seal, certificate, errors);
+        assert errors.isEmpty();
+
+        // Renewing a Notary Key
+        notaryKey = notary.generateNotaryKey(baseUri, notaryKey);
+        logger.info("notaryKey : {}", notaryKey);
+
+        logger.info("Wiki example code test completed.\n");
+    }
+
+
+    @Test
     public void testSigningAndVerification() throws Exception {
         logger.info("Testing round trip digital signing and verification...");
 
@@ -70,7 +112,7 @@ public class V1NotarizationProviderTest {
         assertEquals("  Serialization round trip failed.", notaryKey, copy);
         outputExample("NotaryKey.json", json);
 
-        logger.info("  Exporting the notary certificate...");
+        logger.info("  Extracting the notary certificate...");
         NotaryCertificate certificate = notaryKey.verificationCertificate;
         outputExample("NotaryCertificate.json", certificate);
 
