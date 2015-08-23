@@ -162,7 +162,7 @@ public final class V1NotarizationProvider implements Notarization {
     @Override
     public NotaryKey generateNotaryKey(URI baseUri, Map<String, Object> additionalAttributes) {
         logger.entry(baseUri, additionalAttributes);
-        NotaryKey notaryKey = generateNotaryKey(baseUri, null, additionalAttributes);
+        NotaryKey notaryKey = generateNotaryKey(baseUri, additionalAttributes, null);
         logger.exit(notaryKey);
         return notaryKey;
     }
@@ -171,15 +171,15 @@ public final class V1NotarizationProvider implements Notarization {
     @Override
     public NotaryKey generateNotaryKey(URI baseUri, NotaryKey previousKey) {
         logger.entry(baseUri, previousKey);
-        NotaryKey notaryKey = generateNotaryKey(baseUri, previousKey, null);
+        NotaryKey notaryKey = generateNotaryKey(baseUri, null, previousKey);
         logger.exit(notaryKey);
         return notaryKey;
     }
 
 
     @Override
-    public NotaryKey generateNotaryKey(URI baseUri, NotaryKey previousKey, Map<String, Object> additionalAttributes) {
-        logger.entry(baseUri, previousKey, additionalAttributes);
+    public NotaryKey generateNotaryKey(URI baseUri, Map<String, Object> additionalAttributes, NotaryKey previousKey) {
+        logger.entry(baseUri, additionalAttributes, previousKey);
 
         logger.debug("Generating a new RSA key pair...");
         KeyPair keyPair = certificateManager.generateKeyPair();

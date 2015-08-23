@@ -126,11 +126,11 @@ public interface Notarization {
      * based on the algorithm implemented by the specific notary implementation.
      *
      * @param baseUri The location of the identity registry that will manage the certificates.
-     * @param previousKey The previous notary, if one exists, or null if this is the first in the chain.
      * @param additionalAttributes Any additional attributes about the notary key.
+     * @param previousKey The previous notary, if one exists, or null if this is the first in the chain.
      * @return The newly generated notary key.
      */
-    NotaryKey generateNotaryKey(URI baseUri, NotaryKey previousKey, Map<String, Object> additionalAttributes);
+    NotaryKey generateNotaryKey(URI baseUri, Map<String, Object> additionalAttributes, NotaryKey previousKey);
 
     /**
      * This method serializes, as a JSON string, the specified notary key encrypting the
