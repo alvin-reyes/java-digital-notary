@@ -50,8 +50,8 @@
     </developers>
 
     <properties>
-        <java-smart-objects-version>3.7</java-smart-objects-version>
-        <java-security-framework-version>3.14</java-security-framework-version>
+        <java-smart-objects-version>3.9</java-smart-objects-version>
+        <java-security-framework-version>3.15</java-security-framework-version>
     </properties>
 
     <dependencies>
