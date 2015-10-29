@@ -294,7 +294,7 @@ public final class V1NotarizationProvider implements Notarization {
         attributes.documentType = documentType;
         attributes.documentHash = hashDocument(document);
         attributes.verificationCitation = notaryKey.verificationCitation;
-        attributes.watermark = new Watermark();
+        attributes.watermark = generateWatermark(Notarization.VALID_FOR_FOREVER);
 
         logger.debug("Signing the notary seal...");
         NotarySeal seal = new NotarySeal();
