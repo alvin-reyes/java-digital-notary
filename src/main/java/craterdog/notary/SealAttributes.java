@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import craterdog.smart.SmartObject;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.joda.time.DateTime;
 
 
 /**
@@ -23,11 +22,6 @@ import org.joda.time.DateTime;
  * @author Derk Norton
  */
 public final class SealAttributes extends SmartObject<SealAttributes> {
-
-    /**
-     * The date and time that the document was notarized.
-     */
-    public DateTime timestamp;
 
     /**
      * The type of document that this seal notarizes.
@@ -49,15 +43,15 @@ public final class SealAttributes extends SmartObject<SealAttributes> {
     public String documentHash;
 
     /**
-     * A citation to the public key that can be used to verify this notary seal.
-     */
-    public DocumentCitation verificationCitation;
-
-    /**
      * The lifetime of the notary key associated with this certificate and the version of the
      * algorithm it uses for signing.
      */
     public Watermark watermark;
+
+    /**
+     * A citation to the public key that can be used to verify this notary seal.
+     */
+    public DocumentCitation verificationCitation;
 
     /*
      * This map is used to hold any JSON attributes that are not mappable to the existing attributes.

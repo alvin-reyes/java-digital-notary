@@ -291,7 +291,6 @@ public final class V1NotarizationProvider implements Notarization {
 
         logger.debug("Creating the notary seal attributes...");
         SealAttributes attributes = new SealAttributes();
-        attributes.timestamp = DateTime.now();
         attributes.documentType = documentType;
         attributes.documentHash = hashDocument(document);
         attributes.verificationCitation = notaryKey.verificationCitation;
@@ -394,30 +393,25 @@ public final class V1NotarizationProvider implements Notarization {
                 logger.error("The notary seal attributes are missing...");
                 errors.put("seal.attributes.are.missing", seal);
             } else {
-                DateTime timestamp = attributes.timestamp;
                 String documentType = attributes.documentType;
-                String documentHash = attributes.documentHash;
-                DocumentCitation verificationCitation = attributes.verificationCitation;
-                Watermark watermark = attributes.watermark;
-                if (timestamp == null) {
-                    logger.error("The notary seal timestamp is missing...");
-                    errors.put("seal.timestamp.is.missing", seal);
-                }
                 if (documentType == null || documentType.isEmpty()) {
                     logger.error("The notary seal document type is missing...");
                     errors.put("seal.document.type.is.missing", seal);
                 }
+                String documentHash = attributes.documentHash;
                 if (documentHash == null || documentHash.isEmpty()) {
                     logger.error("The notary seal document hash is missing...");
                     errors.put("seal.document.hash.is.missing", seal);
                 }
-                if (verificationCitation == null) {
-                    logger.error("The notary seal verification citation is missing...");
-                    errors.put("seal.verification.citation.is.missing", seal);
-                }
+                Watermark watermark = attributes.watermark;
                 if (watermark == null) {
                     logger.error("The notary seal watermark is missing...");
                     errors.put("seal.watermark.is.missing", seal);
+                }
+                DocumentCitation verificationCitation = attributes.verificationCitation;
+                if (verificationCitation == null) {
+                    logger.error("The notary seal verification citation is missing...");
+                    errors.put("seal.verification.citation.is.missing", seal);
                 }
             }
             if (errors.size() == errorCount) {
@@ -487,13 +481,13 @@ public final class V1NotarizationProvider implements Notarization {
                     logger.error("The notary certificate identity location is missing...");
                     errors.put("certificate.identity.location.is.missing", certificate);
                 }
-                if (attributes.verificationKey == null) {
-                    logger.error("The notary certificate verification key is missing...");
-                    errors.put("certificate.verification.key.is.missing", certificate);
-                }
                 if (attributes.watermark == null) {
                     logger.error("The notary certificate watermark is missing...");
                     errors.put("certificate.watermark.is.missing", certificate);
+                }
+                if (attributes.verificationKey == null) {
+                    logger.error("The notary certificate verification key is missing...");
+                    errors.put("certificate.verification.key.is.missing", certificate);
                 }
             }
             if (errors.size() == errorCount) {
