@@ -1,4 +1,4 @@
-![Java Digital Notary](https://github.com/craterdog/java-digital-notary/blob/master/docs/images/seal.jpg)
+![Java Digital Notary](https://github.com/craterdog-crypto-payments/java-digital-notary/blob/master/docs/images/seal.jpg)
 
 ### Java Digital Notary
 It's common to be asked to have certain documents notarized when dealing with financial institutions. The
@@ -35,9 +35,9 @@ notarization protocol
 ### Quick Links
 For more detail on this project click on the following links:
 
- * [javadocs](http://craterdog.github.io/java-digital-notary/latest/index.html)
- * [wiki](https://github.com/craterdog/java-digital-notary/wiki)
- * [release notes](https://github.com/craterdog/java-digital-notary/wiki/releases)
+ * [javadocs](http://craterdog-crypto-payments.github.io/java-digital-notary/latest/index.html)
+ * [wiki](https://github.com/craterdog-crypto-payments/java-digital-notary/wiki)
+ * [release notes](https://github.com/craterdog-crypto-payments/java-digital-notary/wiki/releases)
  * [website](http://craterdog.com)
 
 ### Getting Started
