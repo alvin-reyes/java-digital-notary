@@ -13,37 +13,21 @@ import craterdog.smart.SmartObject;
 import org.joda.time.DateTime;
 
 /**
- * This class defines a digital seal that is used to sign a document.
+ * This class defines a notary seal that is used to digitally sign a document.
  *
  * @author Derk Norton
  */
 public final class NotarySeal extends SmartObject<NotarySeal> {
 
     /**
-     * The date and time that the document was notarized.
+     * The actual attributes that make up the notary seal.
      */
-    public DateTime timestamp;
+    public SealAttributes attributes;
 
     /**
-     * The type of document that this seal notarizes.
+     * A base 32 encoding of the digital signature generated for the seal attributes
+     * using the private notary signing key.
      */
-    public String documentType;
-
-    /**
-     * A base 32 encoding of the bytes that were generated as a signature of the document. The
-     * signature must be generated using the following steps:
-     * <ol>
-     * <li>Format the document as a string.</li>
-     * <li>Extract the characters of the string into a "UTF-8" based byte array.</li>
-     * <li>Generate the signature bytes for that array using the algorithm specified in the <code>Watermark</code>.</li>
-     * <li>Encode the signature bytes as a base 32 string using the craterdog.utils.Base32Utils class.</li>
-     * </ol>
-     */
-    public String documentSignature;
-
-    /**
-     * A citation to the public key that can be used to verify this digital seal.
-     */
-    public DocumentCitation verificationCitation;
+    public String selfSignature;
 
 }

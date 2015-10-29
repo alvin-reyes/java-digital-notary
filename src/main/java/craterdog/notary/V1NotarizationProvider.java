@@ -289,16 +289,19 @@ public final class V1NotarizationProvider implements Notarization {
         validateWatermark(watermark, errors);
         throwExceptionOnErrors("notary.key.has.expired", errors);
 
-        logger.debug("Signing the document...");
-        PrivateKey signingKey = notaryKey.signingKey;
-        String signature = generateDocumentSignature(document, signingKey);
+        logger.debug("Creating the notary seal attributes...");
+        SealAttributes attributes = new SealAttributes();
+        attributes.timestamp = DateTime.now();
+        attributes.documentType = documentType;
+        attributes.documentHash = hashDocument(document);
+        attributes.verificationCitation = notaryKey.verificationCitation;
+        attributes.watermark = new Watermark();
 
-        logger.debug("Creating a digital notary seal...");
+        logger.debug("Signing the notary seal...");
         NotarySeal seal = new NotarySeal();
-        seal.timestamp = DateTime.now();
-        seal.documentType = documentType;
-        seal.documentSignature = signature;
-        seal.verificationCitation = notaryKey.verificationCitation;
+        PrivateKey signingKey = notaryKey.signingKey;
+        seal.attributes = attributes;
+        seal.selfSignature = generateDocumentSignature(attributes.toString(), signingKey);
 
         logger.exit(seal);
         return seal;
@@ -322,10 +325,12 @@ public final class V1NotarizationProvider implements Notarization {
         }
         if (errorCount == errors.size()) {
             // no new errors, so parameters should be valid
-            logger.debug("Validating the signature of the document...");
-            String signature = seal.documentSignature;
-            PublicKey verificationKey = certificate.attributes.verificationKey;
-            validateDocumentSignature(document, signature, verificationKey, errors);
+            logger.debug("Validating the hash of the document...");
+            String documentHash = seal.attributes.documentHash;
+            if (!documentHash.equals(hashDocument(document))) {
+                logger.error("The document hash does not match the hash in the notary seal...");
+                errors.put("document.hash.is.invalid", document);
+            }
         }
 
         logger.exit(errors);
@@ -379,31 +384,48 @@ public final class V1NotarizationProvider implements Notarization {
             errors.put("seal.is.missing", seal);
         } else {
             int errorCount = errors.size();  // record it to see if it changes
-            DateTime timestamp = seal.timestamp;
-            String documentType = seal.documentType;
-            String documentSignature = seal.documentSignature;
-            DocumentCitation verificationCitation = seal.verificationCitation;
-            if (timestamp == null) {
-                logger.error("The notary seal timestamp is missing...");
-                errors.put("seal.timestamp.is.missing", seal);
+            String selfSignature = seal.selfSignature;
+            if (selfSignature == null) {
+                logger.error("The notary seal self signature is missing...");
+                errors.put("seal.self.signature.is.missing", seal);
             }
-            if (documentType == null || documentType.isEmpty()) {
-                logger.error("The notary seal document type is missing...");
-                errors.put("seal.document.type.is.missing", seal);
+            SealAttributes attributes = seal.attributes;
+            if (attributes == null) {
+                logger.error("The notary seal attributes are missing...");
+                errors.put("seal.attributes.are.missing", seal);
+            } else {
+                DateTime timestamp = attributes.timestamp;
+                String documentType = attributes.documentType;
+                String documentHash = attributes.documentHash;
+                DocumentCitation verificationCitation = attributes.verificationCitation;
+                Watermark watermark = attributes.watermark;
+                if (timestamp == null) {
+                    logger.error("The notary seal timestamp is missing...");
+                    errors.put("seal.timestamp.is.missing", seal);
+                }
+                if (documentType == null || documentType.isEmpty()) {
+                    logger.error("The notary seal document type is missing...");
+                    errors.put("seal.document.type.is.missing", seal);
+                }
+                if (documentHash == null || documentHash.isEmpty()) {
+                    logger.error("The notary seal document hash is missing...");
+                    errors.put("seal.document.hash.is.missing", seal);
+                }
+                if (verificationCitation == null) {
+                    logger.error("The notary seal verification citation is missing...");
+                    errors.put("seal.verification.citation.is.missing", seal);
+                }
+                if (watermark == null) {
+                    logger.error("The notary seal watermark is missing...");
+                    errors.put("seal.watermark.is.missing", seal);
+                }
             }
-            if (documentSignature == null || documentSignature.isEmpty()) {
-                logger.error("The notary seal document signature is missing...");
-                errors.put("seal.document.signature.is.missing", seal);
-            }
-            if (verificationCitation == null) {
-                logger.error("The notary seal verification citation is missing...");
-                errors.put("seal.verification.citation.is.missing", seal);
-            }
-            if (certificate == null) {
-                logger.error("The notary seal verification certificate is missing...");
-                errors.put("verification.certificate.is.missing", certificate);
-            } else if (errors.size() == errorCount) {
+            if (errors.size() == errorCount) {
                 // no new errors, so parameters should be valid
+                PublicKey verificationKey = certificate.attributes.verificationKey;
+                String document = seal.attributes.toString();
+                validateDocumentSignature(document, selfSignature, verificationKey, errors);
+                DocumentCitation verificationCitation = seal.attributes.verificationCitation;
                 validateDocumentCitation(verificationCitation, certificate.toString(), errors);
             }
         }

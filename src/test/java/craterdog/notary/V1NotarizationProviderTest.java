@@ -101,7 +101,7 @@ public class V1NotarizationProviderTest {
         logger.info("Testing round trip digital signing and verification...");
 
         logger.info("  Generating a new notary key...");
-        URI baseUri = new URI("http://foo.com/IdentityManagement");
+        URI baseUri = new URI("http://foo.bar/IdentityManagement");
         Notarization notary = new V1NotarizationProvider();
         NotaryKey notaryKey = notary.generateNotaryKey(baseUri);
 
@@ -145,7 +145,7 @@ public class V1NotarizationProviderTest {
 
     @Test
     public void testPasswords() throws Exception {
-        URI baseUri = new URI("http://foo.com/IdentityManagement");
+        URI baseUri = new URI("http://foo.bar/IdentityManagement");
         Notarization notary = new V1NotarizationProvider();
         NotaryKey notaryKey = notary.generateNotaryKey(baseUri);
         char[] password = new Tag().toString().toCharArray();
