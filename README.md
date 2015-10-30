@@ -27,9 +27,10 @@ The following highlights the various components that are provided by this projec
 
  * *NotaryKey* - the private key that is used to notarize a document
  * *NotarySeal* - the tamperproof seal that contains the digital signature of the document
- * *NotaryCerticate* - the public key that is used to validate a notary seal created with
+ * *NotaryCerticate* - the public key that is used to validate a notary seal created with the corresponding
+private notary key
  * *Notarization* - the Java interface that must be supported by all notarization providers
- * *V1NotarizationProvider* - a notarization provider that implements version 1.x of the
+ * *V1NotarizationProvider* - a notarization provider that implements the latest version 1.x of the
 notarization protocol
 
 ### Quick Links
