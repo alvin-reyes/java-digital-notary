@@ -1,8 +1,8 @@
 {
-  "hashingAlgorithm" : "SHA256",
-  "signingAlgorithm" : "SHA1withRSA",
+  "hashingAlgorithm" : "SHA-256",
+  "signingAlgorithm" : "SHA256withRSA",
   "majorVersion" : 1,
   "minorVersion" : 0,
-  "creationTimestamp" : "2015-10-29T17:28:10.516Z",
-  "expirationTimestamp" : "2016-10-28T17:28:10.516Z"
+  "creationTimestamp" : "2015-12-19T22:20:08.701Z",
+  "expirationTimestamp" : "2016-12-18T22:20:08.701Z"
 }

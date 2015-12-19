@@ -15,7 +15,7 @@
     <parent>
         <groupId>com.craterdog.maven-parent-poms</groupId>
         <artifactId>java-pojo</artifactId>
-        <version>3.16</version>
+        <version>3.17</version>
         <relativePath />
     </parent>
 
@@ -50,8 +50,8 @@
     </developers>
 
     <properties>
-        <java-smart-objects-version>3.9</java-smart-objects-version>
-        <java-security-framework-version>3.15</java-security-framework-version>
+        <java-smart-objects-version>3.13</java-smart-objects-version>
+        <java-security-framework-version>3.19</java-security-framework-version>
     </properties>
 
     <dependencies>

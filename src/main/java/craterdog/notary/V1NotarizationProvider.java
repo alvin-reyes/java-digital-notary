@@ -10,13 +10,14 @@
 package craterdog.notary;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import craterdog.primitives.Tag;
 import craterdog.notary.mappers.NotaryModule;
 import craterdog.security.CertificateManager;
 import craterdog.security.MessageCryptex;
 import craterdog.security.RsaAesMessageCryptex;
 import craterdog.security.RsaCertificateManager;
-import craterdog.smart.SmartObjectMapper;
+import craterdog.smart.SmartObject;
 import craterdog.utils.Base32Utils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -216,7 +217,7 @@ public final class V1NotarizationProvider implements Notarization {
         logger.debug("Marshalling the notary key into a JSON string...");
         String json;
         try {
-            SmartObjectMapper mapper = new SmartObjectMapper(new NotaryModule(password));
+            ObjectMapper mapper = SmartObject.createMapper(new NotaryModule(password));
             json = mapper.writeValueAsString(notaryKey);
         } catch (Exception e) {
             RuntimeException exception = new RuntimeException("An unexpected exception occurred while attempting to serialize a notary key.", e);
@@ -235,7 +236,7 @@ public final class V1NotarizationProvider implements Notarization {
         logger.debug("Unmarshalling the notary key from a JSON string...");
         NotaryKey notaryKey;
         try {
-            SmartObjectMapper mapper = new SmartObjectMapper(new NotaryModule(password));
+            ObjectMapper mapper = SmartObject.createMapper(new NotaryModule(password));
             notaryKey = mapper.readValue(json, NotaryKey.class);
         } catch (JsonMappingException e) {
             String messageTag = "invalid.notary.key.password";
