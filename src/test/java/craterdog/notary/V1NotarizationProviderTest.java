@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.junit.AfterClass;
@@ -55,7 +57,7 @@ public class V1NotarizationProviderTest {
 
 
     @Test
-    public void testExamples() throws Exception {
+    public void testExamples() throws URISyntaxException {
         logger.info("Testing the wiki example code...");
 
         // Initializing a Notification Provider
@@ -67,11 +69,15 @@ public class V1NotarizationProviderTest {
         logger.info("notaryKey : {}", notaryKey);
 
         // Serializing and Deserializing a Notary Key
-        char[] password = "areallyhardtoguesspassword".toCharArray();
-        String json = notary.serializeNotaryKey(notaryKey, password);
-        logger.info("serializedNotaryKey : {}", json);
-        NotaryKey copy = notary.deserializeNotaryKey(json, password);
-        assert notaryKey.equals(copy);
+        try {
+            char[] password = "areallyhardtoguesspassword".toCharArray();
+            String json = notary.serializeNotaryKey(notaryKey, password);
+            logger.info("serializedNotaryKey : {}", json);
+            NotaryKey copy = notary.deserializeNotaryKey(json, password);
+            assert notaryKey.equals(copy);
+        } catch (IOException e) {
+            fail("The round-trip serialization of the notary key failed with: \n" + e);
+        }
 
         // Extracting the Public Notary Certificate
         NotaryCertificate certificate = notaryKey.verificationCertificate;
@@ -97,7 +103,7 @@ public class V1NotarizationProviderTest {
 
 
     @Test
-    public void testSigningAndVerification() throws Exception {
+    public void testSigningAndVerification() throws URISyntaxException {
         logger.info("Testing round trip digital signing and verification...");
 
         logger.info("  Generating a new notary key...");
@@ -107,10 +113,14 @@ public class V1NotarizationProviderTest {
 
         logger.info("  Serializing and deserializing the notary key...");
         char[] password = new Tag().toString().toCharArray();
-        String json = notary.serializeNotaryKey(notaryKey, password);
-        NotaryKey copy = notary.deserializeNotaryKey(json, password);
-        assertEquals("  Serialization round trip failed.", notaryKey, copy);
-        outputExample("NotaryKey.json", json);
+        try {
+            String json = notary.serializeNotaryKey(notaryKey, password);
+            NotaryKey copy = notary.deserializeNotaryKey(json, password);
+            assertEquals("  Serialization round trip failed.", notaryKey, copy);
+            outputExample("NotaryKey.json", json);
+        } catch (IOException e) {
+            fail("The round-trip serialization of the notary key failed with: \n" + e);
+        }
 
         logger.info("  Extracting the notary certificate...");
         NotaryCertificate certificate = notaryKey.verificationCertificate;
@@ -136,28 +146,38 @@ public class V1NotarizationProviderTest {
         notaryKey = notary.generateNotaryKey(baseUri, previousNotaryKey);
 
         logger.info("  Serializing and deserializing the notary key...");
-        json = notary.serializeNotaryKey(notaryKey, password);
-        copy = notary.deserializeNotaryKey(json, password);
-        assertEquals("  Serialization round trip failed.", notaryKey, copy);
+        try {
+            String json = notary.serializeNotaryKey(notaryKey, password);
+            NotaryKey copy = notary.deserializeNotaryKey(json, password);
+            assertEquals("  Serialization round trip failed.", notaryKey, copy);
+        } catch (IOException e) {
+            fail("The round-trip serialization of the notary key failed with: \n" + e);
+        }
 
+        logger.info("  Nulling out the password...");
+        Arrays.fill(password, (char) 0);
         logger.info("Round trip digital signing and verification test completed.\n");
     }
 
     @Test
-    public void testPasswords() throws Exception {
+    public void testPasswords() throws URISyntaxException {
         URI baseUri = new URI("http://foo.bar/IdentityManagement");
         Notarization notary = new V1NotarizationProvider();
         NotaryKey notaryKey = notary.generateNotaryKey(baseUri);
         char[] password = new Tag().toString().toCharArray();
         String json = notary.serializeNotaryKey(notaryKey, password);
         try {
-            notary.deserializeNotaryKey(json, "not the right password".toCharArray());
-            fail("  The different password should have caused a failure.");
-        } catch (ValidationException e) {
-            // expected
+            try {
+                notary.deserializeNotaryKey(json, "not the right password".toCharArray());
+                fail("  The different password should have caused a failure.");
+            } catch (ValidationException e) {
+                // expected
+            }
+            NotaryKey copy = notary.deserializeNotaryKey(json, password);
+            assertEquals("  The serialization and deserialization did not result in the same notary key.", notaryKey, copy);
+        } catch (IOException e) {
+            fail("The deserialization of the notary key failed with: \n" + e);
         }
-        NotaryKey copy = notary.deserializeNotaryKey(json, password);
-        assertTrue("  The serialization and deserialization did not result in the same notary key.", notaryKey.equals(copy));
     }
 
 

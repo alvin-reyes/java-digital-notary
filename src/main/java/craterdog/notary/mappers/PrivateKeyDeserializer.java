@@ -13,8 +13,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import craterdog.security.CertificateManager;
-import craterdog.security.RsaCertificateManager;
+import craterdog.security.MessageCryptex;
+import craterdog.security.RsaAesMessageCryptex;
 import java.io.IOException;
 import java.security.PrivateKey;
 
@@ -25,7 +25,7 @@ import java.security.PrivateKey;
  */
 public class PrivateKeyDeserializer extends JsonDeserializer<PrivateKey> {
 
-    static private final CertificateManager certificateManager = new RsaCertificateManager();
+    static private final MessageCryptex cryptex = new RsaAesMessageCryptex();
 
     private final char[] password;
 
@@ -45,7 +45,7 @@ public class PrivateKeyDeserializer extends JsonDeserializer<PrivateKey> {
             throws IOException, JsonProcessingException {
         PrivateKey privateKey = null;
         if (password != null) {
-            privateKey = certificateManager.decodePrivateKey(p.getValueAsString(), password);
+            privateKey = cryptex.decodePrivateKey(p.getValueAsString(), password);
         }
         return privateKey;
     }

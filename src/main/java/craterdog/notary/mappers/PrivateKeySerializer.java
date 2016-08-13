@@ -13,8 +13,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import craterdog.security.CertificateManager;
-import craterdog.security.RsaCertificateManager;
+import craterdog.security.MessageCryptex;
+import craterdog.security.RsaAesMessageCryptex;
 import java.io.IOException;
 import java.security.PrivateKey;
 
@@ -26,7 +26,7 @@ import java.security.PrivateKey;
  */
 public class PrivateKeySerializer extends JsonSerializer<PrivateKey> {
 
-    static private final CertificateManager certificateManager = new RsaCertificateManager();
+    static private final MessageCryptex cryptex = new RsaAesMessageCryptex();
 
     private final char[] password;
 
@@ -46,7 +46,7 @@ public class PrivateKeySerializer extends JsonSerializer<PrivateKey> {
             throws IOException, JsonProcessingException {
         String pemValue = "<not shown>";
         if (password != null) {
-            pemValue = certificateManager.encodePrivateKey(privateKey, password);
+            pemValue = cryptex.encodePrivateKey(privateKey, password);
         }
         generator.writeString(pemValue);
     }

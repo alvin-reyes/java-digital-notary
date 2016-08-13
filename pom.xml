@@ -50,8 +50,8 @@
     </developers>
 
     <properties>
-        <java-smart-objects-version>3.13</java-smart-objects-version>
-        <java-security-framework-version>3.19</java-security-framework-version>
+        <java-smart-objects-version>3.14</java-smart-objects-version>
+        <java-security-framework-version>3.22</java-security-framework-version>
     </properties>
 
     <dependencies>
@@ -59,11 +59,6 @@
             <groupId>com.craterdog</groupId>
             <artifactId>java-smart-objects</artifactId>
             <version>${java-smart-objects-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.craterdog.java-security-framework</groupId>
-            <artifactId>java-certificate-management-providers</artifactId>
-            <version>${java-security-framework-version}</version>
         </dependency>
         <dependency>
             <groupId>com.craterdog.java-security-framework</groupId>

@@ -13,10 +13,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import craterdog.primitives.Tag;
 import craterdog.notary.mappers.NotaryModule;
-import craterdog.security.CertificateManager;
 import craterdog.security.MessageCryptex;
 import craterdog.security.RsaAesMessageCryptex;
-import craterdog.security.RsaCertificateManager;
 import craterdog.smart.SmartObject;
 import craterdog.utils.Base32Utils;
 import java.io.IOException;
@@ -45,8 +43,7 @@ public final class V1NotarizationProvider implements Notarization {
 
     static private final XLogger logger = XLoggerFactory.getXLogger(V1NotarizationProvider.class);
 
-    private final CertificateManager certificateManager = new RsaCertificateManager();
-    private final MessageCryptex cryptex = new RsaAesMessageCryptex();
+    static private final MessageCryptex cryptex = new RsaAesMessageCryptex();
 
     /**
      * The hashing algorithm used to generate hash values for the documents.
@@ -183,7 +180,7 @@ public final class V1NotarizationProvider implements Notarization {
         logger.entry(baseUri, additionalAttributes, previousKey);
 
         logger.debug("Generating a new RSA key pair...");
-        KeyPair keyPair = certificateManager.generateKeyPair();
+        KeyPair keyPair = cryptex.generateKeyPair();
         PrivateKey privateKey = keyPair.getPrivate();
         PublicKey publicKey = keyPair.getPublic();
 
@@ -539,7 +536,7 @@ public final class V1NotarizationProvider implements Notarization {
     private String hashDocument(String document) {
         try {
             byte[] bytes = document.getBytes();
-            MessageDigest hasher = MessageDigest.getInstance("SHA256");
+            MessageDigest hasher = MessageDigest.getInstance("SHA-256");
             byte[] hash = hasher.digest(bytes);
             String hashString = Base32Utils.encode(hash);
             return hashString;
